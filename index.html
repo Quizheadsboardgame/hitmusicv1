@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0CC0DF; /* Background color */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 40%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow */
+            padding: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 5px solid #0CC0DF; /* Outer blue border color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .qa-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer {
+            font-size: 1.2em;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Text shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="quizImage" src="https://i.imgur.com/V3X11VJ.png" alt="Quiz Image">
+        <div class="qa-box">
+            <div id="question" class="question">Click the image to get a question!</div>
+            <div id="answer" class="answer"></div>
+        </div>
+    </div>
+    
+    <script>
+        const questionsAndAnswers = [
+            { question: "What was the best-selling single of 2000?", answer: "'Music' by Madonna" },
+            { question: "Which artist holds the record for the most weeks at number one in the 2000s?", answer: "Usher with 'Yeah!' featuring Lil Jon and Ludacris" },
+            { question: "What was the best-selling album of the 2000s?", answer: "‘No Strings Attached’ by *NSYNC" },
+            { question: "Which song by Beyoncé dominated the charts in 2003?", answer: "'Crazy In Love' featuring Jay-Z" },
+            { question: "Which artist released 'Confessions' in 2004, a hugely successful R&B album?", answer: "Usher" },
+            { question: "What song spent 14 weeks at number one on the Billboard Hot 100 in 2009?", answer: "'I Gotta Feeling' by The Black Eyed Peas" },
+            { question: "Which hit single from 2008 by Katy Perry caused controversy with its lyrics?", answer: "'I Kissed a Girl'" },
+            { question: "Which 2010 hit by Lady Gaga became an anthem for self-empowerment?", answer: "'Born This Way'" },
+            { question: "What was Adele's chart-topping single from her album '21' in 2011?", answer: "'Rolling in the Deep'" },
+            { question: "Which artist had a massive 2012 hit with 'Call Me Maybe'?", answer: "Carly Rae Jepsen" },
+            { question: "What hit single from 2013 by Robin Thicke was one of the best-selling songs of the year?", answer: "'Blurred Lines' featuring T.I. and Pharrell" },
+            { question: "Which song by Pharrell Williams was a global hit in 2014, promoting happiness and positivity?", answer: "'Happy'" },
+            { question: "What was the name of Taylor Swift's 2014 album that made her a global pop superstar?", answer: "'1989'" },
+            { question: "What 2015 track by The Weeknd was a huge chart success?", answer: "'Can't Feel My Face'" },
+            { question: "Which song by Justin Bieber dominated charts in 2015?", answer: "'Sorry'" },
+            { question: "Which song by Ed Sheeran broke streaming records in 2017?", answer: "'Shape of You'" },
+            { question: "Which song from 'A Star Is Born' became a chart-topping hit in 2018?", answer: "'Shallow' by Lady Gaga and Bradley Cooper" },
+            { question: "Which rap song by Drake spent 10 weeks at number one in 2018?", answer: "'In My Feelings'" },
+            { question: "What 2019 song by Lil Nas X set a record for the longest time at number one on the Billboard Hot 100?", answer: "'Old Town Road' featuring Billy Ray Cyrus" },
+            { question: "Which K-pop group had a Billboard Hot 100 number-one hit in 2020 with 'Dynamite'?", answer: "BTS" },
+            { question: "Which 2020 song by Cardi B and Megan Thee Stallion caused a viral sensation?", answer: "'WAP'" },
+            { question: "Which hit by Olivia Rodrigo topped the charts in early 2021?", answer: "'Drivers License'" },
+            { question: "What was the biggest hit of 2021 by Lil Nas X?", answer: "'Montero (Call Me By Your Name)'" },
+            { question: "Which 2022 single by Harry Styles was a massive hit across multiple charts?", answer: "'As It Was'" },
+            { question: "Which artist had a chart-topping hit with 'Flowers' in 2023?", answer: "Miley Cyrus" },
+            { question: "Which song by Adele dominated the charts in 2022 from her album '30'?", answer: "'Easy on Me'" },
+            { question: "What was the lead single from Taylor Swift's 2022 album 'Midnights'?", answer: "'Anti-Hero'" },
+            { question: "Which 2022 song by Bad Bunny reached the top of the charts globally?", answer: "'Tití Me Preguntó'" },
+            { question: "Which hit song by Doja Cat topped the charts in 2023?", answer: "'Paint the Town Red'" },
+            { question: "Which song from Billie Eilish topped the charts in 2019?", answer: "'Bad Guy'" },
+            { question: "Which Drake song became a viral sensation on TikTok in 2020?", answer: "'Toosie Slide'" },
+            { question: "Which song by Dua Lipa became a global hit in 2020?", answer: "'Don't Start Now'" },
+            { question: "Which collaboration between Lady Gaga and Ariana Grande topped the charts in 2020?", answer: "'Rain on Me'" },
+            { question: "Which song by Post Malone spent multiple weeks at number one in 2019?", answer: "'Circles'" },
+            { question: "Which 2021 hit by Justin Bieber became a chart-topping single?", answer: "'Peaches' featuring Daniel Caesar and Giveon" },
+            { question: "What song by Olivia Rodrigo became a global hit in 2021?", answer: "'Good 4 U'" },
+            { question: "Which song by BTS reached number one in 2021?", answer: "'Butter'" },
+            { question: "Which song by The Weeknd had record-breaking chart success in 2020?", answer: "'Blinding Lights'" },
+            { question: "Which 2021 hit by Doja Cat featured The Weeknd?", answer: "'You Right'" },
+            { question: "Which 2023 song by The Weeknd from the 'The Idol' soundtrack topped the charts?", answer: "'Double Fantasy' featuring Future" },
+            { question: "Which 2022 hit by Beyoncé celebrated dance and house music?", answer: "'Break My Soul'" },
+            { question: "Which song by Mariah Carey remains a Christmas chart-topping classic every year?", answer: "'All I Want for Christmas Is You'" },
+            { question: "Which hit by Shakira became a viral sensation in 2023?", answer: "'Shakira: Bzrp Music Sessions, Vol. 53'" },
+            { question: "Which hit song by Sam Smith and Kim Petras topped the charts in 2023?", answer: "'Unholy'" },
+            { question: "Which collaboration between Drake and 21 Savage topped the charts in 2022?", answer: "'Jimmy Cooks'" },
+            { question: "Which song by Billie Eilish and Rosalía was a chart success in 2021?", answer: "'Lo Vas A Olvidar'" },
+            { question: "Which song by Cardi B featuring Megan Thee Stallion became a chart-topping hit in 2020?", answer: "'WAP'" },
+            { question: "Which Ed Sheeran song topped the charts in 2014?", answer: "'Thinking Out Loud'" },
+            { question: "Which song by Adele became a massive hit in 2015?", answer: "'Hello'" }
+        ];
+
+        document.getElementById('quizImage').addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            const question = questionsAndAnswers[randomIndex].question;
+            const answer = questionsAndAnswers[randomIndex].answer;
+
+            document.getElementById('question').textContent = question;
+            document.getElementById('answer').textContent = answer;
+        });
+    </script>
+</body>
+</html>
